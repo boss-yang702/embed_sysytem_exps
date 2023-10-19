@@ -1,0 +1,58 @@
+# !/usr/bin/python
+# -*- coding:utf-8 -*-
+import RPi.GPIO as GPIO
+import time
+
+SCLK=3
+RCLK=5
+DIO=7
+
+LED_PIN =[3,5,7]
+for led_pin in LED_PINS:
+    GPIO.setup(led_pin,GPIO.OUT)
+
+LED_Library=[0xC0,0xF9,0xA4,0xB0,0x99,0x82,0xF8,0x80,0x90,0x8C,
+             0xBF,0xC6,0xA1,0x86,0x8E,0xbf]
+
+def Show(i_data):
+    while i_data > 10000:
+        i_data = i_data - 10000
+    if (i_data >= 1000):
+        i_show1 = i_data // 1000
+        i_data -= 1000* i_show1
+    else:
+        i_show1 = 0
+    if (i_data>=100):
+        i_show2=i_data//100
+        i_data-=100*i_show2
+    else:
+        i_show2=0
+    if(i_data>=10):
+        i_show3=i_data//10
+        i_data-=10*i_show3
+    else:
+        i_show3=0
+    i_show4=i_data
+    LED4_Display(i_show1,0x08)
+    LED4_Display(i_show1,0x04)
+    LED4_Display(i_show1,0x02)
+    LED4_Display(i_show1,0x01)
+
+def LED4_Display(i_index,hx_location):
+    LED_OUT(LED_Library[i_index])
+    LED_OUT(hx_location)
+    GPIO.output(RCLK,GPIO.LOW)
+    GPIO.output(RCLK,GPIO.HIGH)
+
+
+def LED_OUT(X):
+    for i in range(0,8):
+        if(X&0x80):
+            GPIO.output(DIO,GPIO.HIGH)
+        else:
+            GPIO.output(DIO,GPIO.LOW)
+        GPIO.output(SCLK,GPIO.LOW)
+        GPIO.output(SCLK,GPIO.HIGH)
+        X <<=1
+while True:
+    Show(2023)
