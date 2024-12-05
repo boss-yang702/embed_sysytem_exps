@@ -1,41 +1,32 @@
 import tkinter as tk
 
-def update_values():
-    # 这个函数用于更新显示的分压值
-    thermal_resistor = thermal_resistor_scale.get()
-    light_resistor = light_resistor_scale.get()
-    variable_resistor = variable_resistor_scale.get()
-    
-    # 在Label上更新分压值
-    thermal_resistor_label.config(text=f"热敏电阻：{thermal_resistor}")
-    light_resistor_label.config(text=f"光敏电阻：{light_resistor}")
-    variable_resistor_label.config(text=f"可变电阻：{variable_resistor}")
+# # 创建一个400x400像素的窗口
+# window = tk.Tk()
+# window.geometry("400x400")
 
-# 创建主窗口
-window = tk.Tk()
-window.title("传感器数据监测")
-
-# 创建热敏电阻滑块
-thermal_resistor_label = tk.Label(window, text="热敏电阻：")
-thermal_resistor_label.pack()
-thermal_resistor_scale = tk.Scale(window, from_=0, to=100, orient="horizontal")
-thermal_resistor_scale.pack()
-
-# 创建光敏电阻滑块
-light_resistor_label = tk.Label(window, text="光敏电阻：")
-light_resistor_label.pack()
-light_resistor_scale = tk.Scale(window, from_=0, to=100, orient="horizontal")
-light_resistor_scale.pack()
-
-# 创建可变电阻滑块
-variable_resistor_label = tk.Label(window, text="可变电阻：")
-variable_resistor_label.pack()
-variable_resistor_scale = tk.Scale(window, from_=0, to=100, orient="horizontal")
-variable_resistor_scale.pack()
-
-# 创建一个更新按钮
-update_button = tk.Button(window, text="更新数值", command=update_values)
-update_button.pack()
-
-# 运行Tkinter主循环
-window.mainloop()
+# # 创建3个标签并将它们放置在窗口中央
+# label1 = tk.Label(window, text="Value 1: <value from Raspberry Pi>")
+# label1.place(relx=0.5, rely=0.33, anchor="center")
+# label2 = tk.Label(window, text="Value 2: <value from Raspberry Pi>")
+# label2.place(relx=0.5, rely=0.5, anchor="center")
+# label3 = tk.Label(window, text="Value 3: <value from Raspberry Pi>")
+# label3.place(relx=0.5, rely=0.67, anchor="center")
+# label1.config(font=16)
+# label1.config(text=4577)
+# # 运行窗口
+# window.mainloop()
+top = ttk.Window(themename='superhero')
+top.title('实验四超声波测距')  # 设置界面标题
+top.geometry('400x80+400+200')  # 设置界面大小与位置
+label1 = ttk.Label(top, text="distance：", bootstyle="warning")
+text1 = ttk.Text(top, width=10, height=1)
+label1.place(x=65, y=22)
+text1.place(x=140, y=16)
+def updatedata():
+    text1.delete(1.0, "end")
+    text1.insert("insert", distance)
+    top.after(100, updatedata)  # 在给定时间后调用函数一次
+    top.update()
+top.after(100, updatedata)  # 0.1s更新一次数据
+# 进入消息循环
+top.mainloop()
